@@ -6,18 +6,16 @@ import streamlit_authenticator as stauth
 from ai_scorer import gpt_lead_reason
 from crm_connector import push_lead_to_hubspot
 
-# --- Authentication setup ---
-hashed_passwords = stauth.Hasher(["yourpassword"]).generate()
-
+# --- Authentication Setup ---
 users = {
     "roopa@example.com": {
         "name": "Roopa",
-        "password": hashed_passwords[0]
+        "password": "$2b$12$r3XiUnT8BtYvO1FNL1/7I.FgZswLZJ1vuP3lmvYmIoh9xHTakHQxC"  # pre-hashed password
     }
 }
 
 authenticator = stauth.Authenticate(
-    {u: {"name": d["name"], "password": d["password"]} for u, d in users.items()},
+    users,
     "auth_cookie", "some_signature_key", cookie_expiry_days=1
 )
 
@@ -30,6 +28,7 @@ if not auth_status:
 authenticator.logout("Logout", "sidebar")
 st.success(f"Welcome {name}!")
 
+# --- App Logic ---
 st.title("🧠 AI-Powered Lead Scorer")
 
 raw_file = st.file_uploader("Upload Raw Leads CSV", type="csv")
@@ -45,7 +44,9 @@ if raw_file and scored_file:
         # GPT Reasoning
         with st.spinner("Generating AI explanations..."):
             merged_df["GPT_Reason"] = merged_df.apply(
-                lambda row: gpt_lead_reason(row["company_keyword"], row.get("linkedin_url", ""), row["ai_score"]), axis=1
+                lambda row: gpt_lead_reason(
+                    row.get("Company", ""), row.get("linkedin_url", ""), row.get("ai_score", 0)
+                ), axis=1
             )
 
         # Score filter
@@ -61,13 +62,13 @@ if raw_file and scored_file:
         st.plotly_chart(px.histogram(filtered_df, x="ai_score", nbins=10, title="Lead Score Distribution"))
 
         st.subheader("🏢 Company Breakdown")
-        pie_fig = px.pie(filtered_df, names="company_keyword", title="Leads by Company")
+        pie_fig = px.pie(filtered_df, names="Company", title="Leads by Company")
         st.plotly_chart(pie_fig)
 
         # CRM Push Button
         if st.button("🚀 Push to HubSpot"):
             for _, row in filtered_df.iterrows():
-                push_lead_to_hubspot(row["company_keyword"], row.get("linkedin_url", ""), row["ai_score"])
+                push_lead_to_hubspot(row["Company"], row.get("linkedin_url", ""), row["ai_score"])
             st.success("✅ Leads pushed to HubSpot!")
 
         st.download_button("Download Filtered Leads", filtered_df.to_csv(index=False), file_name="filtered_leads.csv")
@@ -76,4 +77,3 @@ if raw_file and scored_file:
         st.error("❌ 'Company' column is missing in one of the files.")
 else:
     st.info("Please upload both CSV files to continue.")
-
