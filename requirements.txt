@@ -5,4 +5,4 @@ openai
 hubspot-api-client 
 streamlit-authenticator
 requests
-bicrypt 
+bcrypt 
