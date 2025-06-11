@@ -7,17 +7,20 @@ from ai_scorer import gpt_lead_reason
 from crm_connector import push_lead_to_hubspot
 
 # --- Authentication Setup ---
-users = {
-    "roopa@example.com": {
-        "name": "Roopa",
-        "password": "2d826324f1eaf66b2db7aa8caf41c96e"
+credentials = {
+    "usernames": {
+        "roopa@example.com": {
+            "name": "Roopa",
+            "password": "2d826324f1eaf66b2db7aa8caf41c96e"
+        }
     }
 }
 
 authenticator = stauth.Authenticate(
-    users,
+    credentials,
     "auth_cookie", "some_signature_key", cookie_expiry_days=1
 )
+
 
 name, auth_status, username = authenticator.login("Login", "main")
 
