@@ -1,7 +1,8 @@
 import streamlit_authenticator as stauth
 
 # Replace with your plaintext password
-passwords = ['Ruparani@17']
+password = 'Ruparani@17"
 
-hashed_passwords = stauth.Hasher(passwords).generate()
-print(hashed_passwords[0])
+# Hash the password
+hashed_password = stauth.Hasher([password]).generate()[0]
+print(f"Hashed password: {hashed_password}")
