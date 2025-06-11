@@ -4,7 +4,7 @@ import pandas as pd
 st.title("Build a Smart Mini lead Generation Tool")
 
 try:
-    df = pd.read_csv("app/scored_leads_100.csv")
+    df = pd.read_csv("scored_leads_100.csv")
     st.success("Loaded scored_leads_100.csv successfully.")
     
     score_filter = st.slider("Minimum AI Score", 1, 10, 6)
