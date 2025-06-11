@@ -1,4 +1,5 @@
 
+# streamlit_app.py
 import streamlit as st
 import pandas as pd
 import plotly.express as px
@@ -21,13 +22,13 @@ authenticator = stauth.Authenticate(
     "auth_cookie", "some_signature_key", cookie_expiry_days=1
 )
 
-name, auth_status, username = authenticator.login("Login", "main")
+name, auth_status, username = authenticator.login("Login", location="main")
 
 if not auth_status:
     st.warning("Please log in to continue.")
     st.stop()
 
-authenticator.logout("Logout", "sidebar")
+authenticator.logout("Logout", location="sidebar")
 st.success(f"Welcome {name}!")
 
 # --- App Logic ---
