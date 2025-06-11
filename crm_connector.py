@@ -2,7 +2,7 @@
 from hubspot import HubSpot
 from hubspot.crm.contacts import SimplePublicObjectInput
 
-hubspot_client = HubSpot(access_token="your-hubspot-access-token")
+hubspot_client = HubSpot(access_token="pat-na2-22972c68-0743-4115-8cb2-fca63f103b45")
 
 def push_lead_to_hubspot(company_name, linkedin_url, score):
     properties = {
