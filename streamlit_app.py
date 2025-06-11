@@ -10,7 +10,7 @@ from crm_connector import push_lead_to_hubspot
 users = {
     "roopa@example.com": {
         "name": "Roopa",
-        "password": "$2b$12$r3XiUnT8BtYvO1FNL1/7I.FgZswLZJ1vuP3lmvYmIoh9xHTakHQxC"  # pre-hashed password
+        "password": "2d826324f1eaf66b2db7aa8caf41c96e"
     }
 }
 
