@@ -1,16 +1,10 @@
 # ai_scorer.py
-import openai
-
-openai.api_key = "your-openai-key"  # Replace with your actual key or use environment variable
-
-def gpt_lead_reason(company, linkedin, score):
-    prompt = f"Why might this be a valuable lead? Company: {company}, LinkedIn: {linkedin}, Score: {score}"
-    try:
-        response = openai.ChatCompletion.create(
-            model="gpt-4",
-            messages=[{"role": "user", "content": prompt}]
-        )
-        return response.choices[0].message.content.strip()
-    except Exception as e:
-        return f"GPT Error: {e}"
+def gpt_lead_reason(company, linkedin_url, score):
+    if score >= 8:
+        return f"{company} appears to be a strong lead based on our AI analysis. High LinkedIn presence: {linkedin_url}"
+    elif score >= 5:
+        return f"{company} has moderate potential. Further research recommended. See: {linkedin_url}"
+    else:
+        return f"{company} currently scores low. Consider revisiting after a few months."
+        
         
