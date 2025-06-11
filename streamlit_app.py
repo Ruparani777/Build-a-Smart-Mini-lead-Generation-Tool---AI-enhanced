@@ -1,4 +1,4 @@
-
+# streamlit_app.py
 import streamlit as st
 import pandas as pd
 import plotly.express as px
@@ -7,10 +7,12 @@ from ai_scorer import gpt_lead_reason
 from crm_connector import push_lead_to_hubspot
 
 # --- Authentication setup ---
+hashed_passwords = stauth.Hasher(["yourpassword"]).generate()
+
 users = {
     "roopa@example.com": {
         "name": "Roopa",
-        "password": stauth.Hasher(["yourpassword"]).generate()[0]
+        "password": hashed_passwords[0]
     }
 }
 
@@ -74,4 +76,4 @@ if raw_file and scored_file:
         st.error("❌ 'Company' column is missing in one of the files.")
 else:
     st.info("Please upload both CSV files to continue.")
-    
+
