@@ -12,6 +12,7 @@ credentials = {
         "roopa@example.com": {
             "name": "Roopa",
             "password": "2d826324f1eaf66b2db7aa8caf41c96e"
+        }
     }
 }
 
