@@ -2,7 +2,7 @@ import openai
 import pandas as pd
 import time
 
-openai.api_key = "your_openai_api_key"
+openai.api_key = "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"
 
 def score_company(description):
     prompt = f"Score the following company on how AI-ready they are from 1 to 10:\n\n{description}\n\nScore:"
