@@ -1,4 +1,3 @@
-
 # streamlit_app.py
 import streamlit as st
 import pandas as pd
@@ -17,19 +16,23 @@ credentials = {
     }
 }
 
+# Updated to match latest streamlit_authenticator API
 authenticator = stauth.Authenticate(
     credentials,
     "auth_cookie", "some_signature_key", cookie_expiry_days=1
 )
 
-name, auth_status, username = authenticator.login("Login", location="main")
+authenticator.login("Login", location="main")
 
-if not auth_status:
-    st.warning("Please log in to continue.")
+if st.session_state["authentication_status"] is False:
+    st.error("Username/password is incorrect")
     st.stop()
-
-authenticator.logout("Logout", location="sidebar")
-st.success(f"Welcome {name}!")
+elif st.session_state["authentication_status"] is None:
+    st.warning("Please enter your username and password")
+    st.stop()
+else:
+    st.success(f"Welcome {st.session_state['name']}!")
+    authenticator.logout("Logout", location="sidebar")
 
 # --- App Logic ---
 st.title("🧠 AI-Powered Lead Scorer")
