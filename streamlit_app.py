@@ -1,4 +1,4 @@
-# streamlit_app.py
+
 import streamlit as st
 import pandas as pd
 import plotly.express as px
@@ -20,7 +20,6 @@ authenticator = stauth.Authenticate(
     credentials,
     "auth_cookie", "some_signature_key", cookie_expiry_days=1
 )
-
 
 name, auth_status, username = authenticator.login("Login", "main")
 
