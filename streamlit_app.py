@@ -1,85 +1,41 @@
-# streamlit_app.py
-import streamlit as st
+ import streamlit as st
 import pandas as pd
-import plotly.express as px
-import streamlit_authenticator as stauth
-from ai_scorer import gpt_lead_reason
-from crm_connector import push_lead_to_hubspot
+import base64
 
-# --- Authentication Setup ---
-credentials = {
-    "usernames": {
-        "roopa@example.com": {
-            "name": "Roopa",
-            "password": "2d826324f1eaf66b2db7aa8caf41c96e"
-        }
-    }
-}
+# Page setup
+st.set_page_config(page_title="Smart Lead Scorer", layout="wide")
+st.title("🚀 AI-Enhanced Lead Scoring Tool")
+st.markdown("Upload your raw leads and view AI-enhanced scoring for decision-making.")
 
-# Updated to match latest streamlit_authenticator API
-authenticator = stauth.Authenticate(
-    credentials,
-    "auth_cookie", "some_signature_key", cookie_expiry_days=1
-)
+# File upload
+uploaded_leads = st.file_uploader("📤 Upload your raw leads CSV", type=["csv"])
+uploaded_scores = st.file_uploader("📤 Upload your AI-scored leads CSV", type=["csv"])
 
-name, authentication_status, username = authenticator.login("Login", location="main")
+if uploaded_leads is not None and uploaded_scores is not None:
+    # Load CSV files
+    leads_df = pd.read_csv(uploaded_leads)
+    scored_df = pd.read_csv(uploaded_scores)
 
-if authentication_status is False:
-    st.error("Username/password is incorrect")
-    st.stop()
-elif authentication_status is None:
-    st.warning("Please enter your username and password")
-    st.stop()
+    # Merge data
+    merged_df = pd.merge(leads_df, scored_df, on="Company", how="left")
+
+    st.success("✅ Files uploaded and merged successfully!")
+
+    # Score filtering
+    min_score = st.slider("🎯 Minimum AI Score Filter", min_value=0, max_value=100, value=70)
+    filtered_df = merged_df[merged_df["AI Score"] >= min_score]
+
+    st.subheader(f"🔎 Showing {len(filtered_df)} leads with AI score ≥ {min_score}")
+    st.caption("Use the slider to filter high-quality leads based on their AI readiness score.")
+
+    # Display filtered leads using Streamlit's native table
+    st.dataframe(filtered_df, use_container_width=True)
+
+    # Download filtered leads
+    csv = filtered_df.to_csv(index=False)
+    b64 = base64.b64encode(csv.encode()).decode()
+    href = f'<a href="data:file/csv;base64,{b64}" download="filtered_leads.csv">📥 Download Filtered Leads CSV</a>'
+    st.markdown(href, unsafe_allow_html=True)
+
 else:
-    st.success(f"Welcome {name}!")
-    authenticator.logout("Logout", location="sidebar")
-
-# --- App Logic ---
-st.title("🧠 AI-Powered Lead Scorer")
-
-raw_file = st.file_uploader("Upload Raw Leads CSV", type="csv")
-scored_file = st.file_uploader("Upload Scored Leads CSV", type="csv")
-
-if raw_file and scored_file:
-    leads_df = pd.read_csv(raw_file)
-    scored_df = pd.read_csv(scored_file)
-
-    if "Company" in leads_df.columns and "Company" in scored_df.columns:
-        merged_df = pd.merge(leads_df, scored_df, on="Company", how="left")
-
-        # GPT Reasoning
-        with st.spinner("Generating AI explanations..."):
-            merged_df["GPT_Reason"] = merged_df.apply(
-                lambda row: gpt_lead_reason(
-                    row.get("Company", ""), row.get("linkedin_url", ""), row.get("ai_score", 0)
-                ), axis=1
-            )
-
-        # Score filter
-        min_score = int(merged_df["ai_score"].min())
-        max_score = int(merged_df["ai_score"].max())
-        score_filter = st.slider("Filter by AI Score", min_value=min_score, max_value=max_score, value=(min_score, max_score))
-        filtered_df = merged_df[(merged_df["ai_score"] >= score_filter[0]) & (merged_df["ai_score"] <= score_filter[1])]
-
-        st.dataframe(filtered_df)
-
-        # Visualizations
-        st.subheader("📊 Score Distribution")
-        st.plotly_chart(px.histogram(filtered_df, x="ai_score", nbins=10, title="Lead Score Distribution"))
-
-        st.subheader("🏢 Company Breakdown")
-        pie_fig = px.pie(filtered_df, names="Company", title="Leads by Company")
-        st.plotly_chart(pie_fig)
-
-        # CRM Push Button
-        if st.button("🚀 Push to HubSpot"):
-            for _, row in filtered_df.iterrows():
-                push_lead_to_hubspot(row["Company"], row.get("linkedin_url", ""), row["ai_score"])
-            st.success("✅ Leads pushed to HubSpot!")
-
-        st.download_button("Download Filtered Leads", filtered_df.to_csv(index=False), file_name="filtered_leads.csv")
-
-    else:
-        st.error("❌ 'Company' column is missing in one of the files.")
-else:
-    st.info("Please upload both CSV files to continue.")
+    st.warning("👆 Please upload both CSV files to continue.")
