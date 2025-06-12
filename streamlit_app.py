@@ -1,7 +1,5 @@
 import streamlit as st
 import pandas as pd
-import base64
-from simple_salesforce import Salesforce
 from streamlit_authenticator import Authenticate
 import yaml
 from ai_scorer import simple_ai_scoring # <-- IMPORT YOUR SCORING FUNCTION
@@ -31,19 +29,24 @@ if authentication_status:
     uploaded_leads = st.file_uploader("📄 Upload your raw leads CSV", type=["csv"])
 
     if uploaded_leads is not None:
-        leads_df = pd.read_csv(uploaded_leads)
-        st.subheader("Raw Leads Data")
-        st.dataframe(leads_df, use_container_width=True)
+        try:
+            leads_df = pd.read_csv(uploaded_leads)
+            st.subheader("Raw Leads Data")
+            st.dataframe(leads_df, use_container_width=True)
 
-        if st.button("🤖 Run AI Scoring on Leads"):
-            # Apply the scoring function directly
-            leads_df["AI Score"] = leads_df.apply(
-                lambda row: simple_ai_scoring(row.get("Company", ""), row.get("Description", "")),
-                axis=1
-            )
-            # Store the scored data in session state to persist it
-            st.session_state['scored_df'] = leads_df
-            st.success("✅ AI Scoring Complete!")
+            if st.button("🤖 Run AI Scoring on Leads"):
+                # Apply the scoring function directly
+                leads_df["AI Score"] = leads_df.apply(
+                    lambda row: simple_ai_scoring(row.get("Company", ""), row.get("Description", "")),
+                    axis=1
+                )
+                # Store the scored data in session state to persist it
+                st.session_state['scored_df'] = leads_df
+                st.success("✅ AI Scoring Complete!")
+
+        except Exception as e:
+            st.error(f"Error processing file: {e}")
+
 
     # Check if scored data exists in session state before showing the rest of the app
     if 'scored_df' in st.session_state:
@@ -64,8 +67,7 @@ if authentication_status:
             mime="text/csv",
         )
         
-        # --- CRM Integration (More Securely) ---
-               # --- CRM Integration ---
+        # --- FIXED CRM Integration ---
         with st.expander("📢 Push to Salesforce CRM"):
             st.info("This section demonstrates how the app would connect to a CRM like Salesforce.")
             st.markdown("""
@@ -73,13 +75,10 @@ if authentication_status:
             stored in Streamlit's secrets manager. For this demo, the connection is disabled.
             """)
             
-            # The button is disabled to prevent errors
-            if st.button("📢 Connect and Upload to Salesforce", disabled=True):
-                try:
-                    
-                except Exception as e:
-                    st.error(f"CRM upload failed: {e}")
+            # The button is disabled and there is no if/try/except block, which fixes the error.
+            st.button("📢 Connect and Upload to Salesforce", disabled=True)
+
 elif authentication_status is False:
     st.error('Username/password is incorrect')
 elif authentication_status is None:
-    st.warning('Please enter your username and password')
+    st.warning('Please enter your username and password to start')
