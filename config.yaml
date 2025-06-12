@@ -3,7 +3,7 @@ credentials:
     admin:
       email: roopathupakula01@gmail.com
       name: Roopa
-      password: '$2a$12$PpiuXlOVyrfaCKIOFOWW1etMSVMnypGZ5shFGav4MQWpjLF50zYo.'
+      password: '$2a$12$PpiuXlOVyrfaCKIOFOWW1etMSVMnypGZ5shFGav4MQWpjLF50zYo'
 
 cookie:
   name: streamlit_auth
