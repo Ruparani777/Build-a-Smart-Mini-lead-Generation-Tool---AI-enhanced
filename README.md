@@ -19,15 +19,11 @@ This Streamlit-based web app allows authenticated users to:
 
 📁 Directory Structure
 
-Build-a-Smart-Mini-lead-Generation-Tool---AI-enhanced/
-│
-#streamlit\_app.py          
-#Main web app- ai\_scorer.py            
-# Dummy AI scoring logic- scraper.py                
-# Lead scraping logic (static example)-config.yaml               
-# Authentication configuration-requirements.txt          
-# Python dependencies -scored\_leads\_100.csv      
-# Sample scored data-leads_100.csv #Sample raw leads 
+Build-a-Smart-Mini-lead-Generation-Tool---AI-enhanced
+streamlit_app.py          
+Main web app- ai_scorer.py        Dummy AI scoring logic- scraper.py Lead scraping logic (static example)-config.yaml               
+Authentication configuration-requirements.txt and  Python dependencies
+Sample scored data-leads_100.csv Sample raw leads - leads_100.csv
 README.md                 
 # You are here!
 
