@@ -6,3 +6,5 @@ hubspot-api-client
 streamlit-authenticator
 requests
 bcrypt 
+pyyaml
+simple-salesforce
