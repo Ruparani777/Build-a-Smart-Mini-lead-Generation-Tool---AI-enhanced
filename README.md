@@ -21,20 +21,14 @@ This Streamlit-based web app allows authenticated users to:
 
 Build-a-Smart-Mini-lead-Generation-Tool---AI-enhanced/
 │
-├── streamlit\_app.py          #Main web app
-├── ai\_scorer.py            
-# Dummy AI scoring logic
-├── scraper.py                
-# Lead scraping logic (static example)
-├── config.yaml               
-# Authentication configuration
-├── requirements.txt          
-# Python dependencies
-├── scored\_leads\_100.csv      
-# Sample scored data
-├── leads\_100.csv            
-# Sample raw leads
-└── README.md                 
+#streamlit\_app.py          
+#Main web app- ai\_scorer.py            
+# Dummy AI scoring logic- scraper.py                
+# Lead scraping logic (static example)-config.yaml               
+# Authentication configuration-requirements.txt          
+# Python dependencies -scored\_leads\_100.csv      
+# Sample scored data-leads_100.csv #Sample raw leads 
+README.md                 
 # You are here!
 
 
