@@ -1,22 +1,15 @@
-# auth_config.py
-import streamlit_authenticator as stauth
+credentials:
+  usernames:
+    admin:
+      email: roopathupakula01@gmail.com
+      name: Roopa
+      password: '$2a$12$PpiuXlOVyrfaCKIOFOWW1etMSVMnypGZ5shFGav4MQWpjLF50zYo.'  # hashed password for: admin123
 
-# Password hash for: demo123
-hashed_pw = "$2b$12$r3XiUnT8BtYvO1FNL1/7I.FgZswLZJ1vuP3lmvYmIoh9xHTakHQxC"
+cookie:
+  name: streamlit_auth
+  key: some_secret_key
+  expiry_days: 7
 
-credentials = {
-    "usernames": {
-        "roopa@example.com": {
-            "name": "Roopa",
-            "password": hashed_pw
-        }
-    }
-}
-
-def get_authenticator():
-    return stauth.Authenticate(
-        credentials,
-        "auth_cookie",
-        "some_signature_key",
-        cookie_expiry_days=1
-    )
+preauthorized:
+  emails:
+    - admin@example.com
