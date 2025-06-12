@@ -65,20 +65,20 @@ if authentication_status:
         )
         
         # --- CRM Integration (More Securely) ---
-        # --- CRM Integration ---
-with st.expander("📢 Push to Salesforce CRM"):
-    st.info("This section demonstrates how the app would connect to a CRM like Salesforce.")
-    st.markdown("""
-    In a real-world scenario, the app would securely connect to Salesforce using credentials 
-    stored in Streamlit's secrets manager. For this demo, the connection is disabled.
-    """)
-    
-    # The button is disabled to prevent errors
-    if st.button("📢 Connect and Upload to Salesforce", disabled=True):
-        # This code will not run because the button is disabled.
-        # It's left here to show the logic.
-        pass
-
+               # --- CRM Integration ---
+        with st.expander("📢 Push to Salesforce CRM"):
+            st.info("This section demonstrates how the app would connect to a CRM like Salesforce.")
+            st.markdown("""
+            In a real-world scenario, the app would securely connect to Salesforce using credentials 
+            stored in Streamlit's secrets manager. For this demo, the connection is disabled.
+            """)
+            
+            # The button is disabled to prevent errors
+            if st.button("📢 Connect and Upload to Salesforce", disabled=True):
+                try:
+                    
+                except Exception as e:
+                    st.error(f"CRM upload failed: {e}")
 elif authentication_status is False:
     st.error('Username/password is incorrect')
 elif authentication_status is None:
