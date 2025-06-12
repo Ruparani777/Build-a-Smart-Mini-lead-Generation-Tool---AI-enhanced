@@ -1,10 +1,7 @@
 streamlit
 pandas
-plotly
-openai
-hubspot-api-client 
+PyYAML
 streamlit-authenticator
-requests
-bcrypt 
-pyyaml
 simple-salesforce
+requests
+beautifulsoup4
