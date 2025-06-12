@@ -25,7 +25,7 @@ df["AI Score"] = df.apply(
 )
 
 # Save to new file
-output_file = "scored_leads_!00.csv"
+output_file = "scored_leads_100.csv"
 df.to_csv(output_file, index=False)
 
 print(f"✅ AI Scoring complete. File saved as '{output_file}'")
